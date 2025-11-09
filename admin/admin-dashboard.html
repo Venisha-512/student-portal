@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Student Portal</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #7928ca 0%, #337dff 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    nav {
+      width: 100%;
+      background-color: #0288f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    nav ul li {
+      flex: 1;
+      text-align: center;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 0;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #006edc;
+    }
+
+    /* ===== DASHBOARD CONTAINER ===== */
+    .container {
+      width: 320px;
+      height: 320px;
+      text-align: center;
+      background: #24205c;
+      padding: 26px 18px 20px 18px;
+      border-radius: 22px;
+      box-shadow: 0 8px 36px rgba(76,110,227,0.25), 0 1.5px 18px rgba(76,110,227,0.14);
+      animation: fadeIn 1.2s ease forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 80px;
+    }
+
+    .container h1 {
+      color: #fff;
+      font-size: 1.53rem;
+      margin-bottom: 12px;
+      font-weight: 800;
+      text-shadow: 0 2px 8px #0007;
+    }
+
+    .container p {
+      font-size: 1.02rem;
+      color: #eaf2ff;
+      margin-bottom: 18px;
+      text-shadow: 0 1px 6px #0006;
+    }
+
+    .dashboard-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .dashboard-buttons a {
+      display: block;
+      padding: 0.70rem 0;
+      width: 170px;
+      font-size: 0.98rem;
+      border-radius: 32px;
+      background: #2196f3;
+      color: #fff !important;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 3px 11px rgba(33,150,243,0.19);
+      transition: background 0.22s, box-shadow 0.22s;
+      font-weight: 600;
+    }
+
+    .dashboard-buttons a:hover {
+      background: #1769aa;
+      box-shadow: 0 7px 15px rgba(33,150,243,0.22);
+    }
+
+    @media (max-width: 600px) {
+      nav ul li a {
+        font-size: 0.9rem;
+        padding: 14px 0;
+      }
+      .container {
+        width: 90vw;
+        height: 90vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="admin-login.html">Login</a></li>
+      <li><a href="admin-dashboard.html">Dashboard</a></li>
+      <li><a href="manage-students.html">Manage Students</a></li>
+      <li><a href="manage-results.html">Manage Results</a></li>
+      <li><a href="manage-feedback.html">Manage Feedback</a></li>
+    </ul>
+  </nav>
+
+  <section class="container">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome to the Admin Panel</p>
+    <div class="dashboard-buttons">
+      <a href="manage-students.html">Manage Students</a>
+      <a href="manage-results.html">Manage Results</a>
+      <a href="manage-feedback.html">Manage Feedback</a>
+    </div>
+  </section>
+</body>
+</html>

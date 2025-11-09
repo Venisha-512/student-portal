@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results - Student Portal</title>
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center content horizontally */
+    }
+
+    /* ===== NAVIGATION BAR (Kept as requested) ===== */
+    nav {
+      width: 100%;
+      background-color: #0288f7;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    nav ul li {
+      flex: 1;
+      text-align: center;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 0;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #006edc;
+    }
+
+    /* ===== MAIN CONTENT CONTAINER ===== */
+    .container {
+      background-color: #2c2478;
+      margin: 40px 20px;
+      width: 100%;
+      max-width: 700px;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ===== RESULTS SUMMARY CARD (New Visual Element) ===== */
+    .summary-card {
+        background-color: #4b429d; /* Slightly lighter shade for contrast */
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .summary-item {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .summary-item .value {
+        display: block;
+        font-size: 32px;
+        font-weight: bold;
+        color: #ffc107; /* Yellow/Gold accent color */
+        margin-top: 5px;
+    }
+    
+    .status-text {
+        font-size: 1.1rem;
+        font-weight: 700;
+        padding: 5px 15px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    /* ===== TABLE STYLES ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    thead th {
+      background-color: #1277fc;
+      color: white;
+      padding: 15px 10px;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tbody td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background-color: #f6faff;
+    }
+
+    /* Align Grade column center and apply color coding */
+    .grade-cell {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    /* Grade Color Coding */
+    .grade-A-plus, .grade-A { color: #4CAF50; } /* Green */
+    .grade-B { color: #FFC107; } /* Amber/Yellow */
+    .grade-C { color: #FF9800; } /* Orange */
+    .grade-D, .grade-F { color: #F44336; } /* Red */
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        nav ul {
+            flex-wrap: wrap;
+        }
+        nav ul li {
+            flex: 1 1 50%; /* Allow two links per row on mobile */
+        }
+        .container {
+            padding: 20px;
+            margin: 20px 10px;
+        }
+        .summary-card {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+  </style>
+  <script>
+    /**
+     * Determines the CSS class for a grade based on its value.
+     * In a real application, this logic would run server-side or after fetching data.
+     * @param {string} grade - The letter grade (e.g., "A+", "B", "C").
+     * @returns {string} The corresponding CSS class.
+     */
+    function getGradeClass(grade) {
+        switch (grade.toUpperCase()) {
+            case 'A+':
+            case 'A':
+                return 'grade-A-plus';
+            case 'B':
+                return 'grade-B';
+            case 'C':
+                return 'grade-C';
+            case 'D':
+            case 'F':
+                return 'grade-D';
+            default:
+                return '';
+        }
+    }
+
+    /**
+     * Initializes the page by applying CSS classes to grades and calculating summary.
+     */
+    window.onload = function() {
+        const rows = document.querySelectorAll('#resultsTableBody tr');
+        let totalMarks = 0;
+        let numSubjects = 0;
+
+        rows.forEach(row => {
+            const gradeCell = row.cells[2];
+            const marksCell = row.cells[1];
+            const grade = gradeCell.textContent.trim();
+            const marks = parseInt(marksCell.textContent.trim());
+
+            // Apply grade color coding
+            gradeCell.classList.add('grade-cell', getGradeClass(grade));
+            
+            // Calculate totals for summary
+            if (!isNaN(marks)) {
+                totalMarks += marks;
+                numSubjects++;
+            }
+        });
+        
+        // Calculate Average and Display Summary
+        const avgMarks = numSubjects > 0 ? (totalMarks / numSubjects).toFixed(1) : 'N/A';
+        document.getElementById('avgMarksValue').textContent = avgMarks;
+        document.getElementById('subjectsCount').textContent = numSubjects;
+        
+        // Simple status logic for display
+        const statusElement = document.getElementById('overallStatus');
+        if (avgMarks >= 80) {
+            statusElement.textContent = 'EXCELLENT';
+            statusElement.style.backgroundColor = '#4CAF50';
+        } else if (avgMarks >= 60) {
+            statusElement.textContent = 'GOOD';
+            statusElement.style.backgroundColor = '#FFC107';
+        } else {
+            statusElement.textContent = 'NEEDS WORK';
+            statusElement.style.backgroundColor = '#F44336';
+        }
+    };
+  </script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <section class="container">
+    <h2>Your Academic Results</h2>
+
+    <!-- Summary Card (Added for visual interest and data summary) -->
+    <div class="summary-card">
+        <div class="summary-item">
+            Total Subjects
+            <span class="value" id="subjectsCount">3</span>
+        </div>
+        <div class="summary-item">
+            Average Marks
+            <span class="value" id="avgMarksValue">84.3</span>
+        </div>
+        <div class="summary-item">
+            Overall Status
+            <span class="status-text" id="overallStatus">EXCELLENT</span>
+        </div>
+    </div>
+    
+    <!-- Results Table -->
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Marks / 100</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody id="resultsTableBody">
+        <tr>
+          <td>Mathematics</td>
+          <td>85</td>
+          <td>A</td>
+        </tr>
+        <tr>
+          <td>English</td>
+          <td>78</td>
+          <td>B</td>
+        </tr>
+        <tr>
+          <td>Science</td>
+          <td>90</td>
+          <td>A+</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</body>
+</html>

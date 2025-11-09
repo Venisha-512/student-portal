@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Results - Admin Panel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    nav {
+      width: 100%;
+      background-color: #0288f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    nav ul li {
+      flex: 1;
+      text-align: center;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 0;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #006edc;
+    }
+
+    .container {
+      background-color: #2c2478;
+      margin: 50px auto;
+      width: 90%;
+      max-width: 700px;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: bold;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    button {
+      background-color: #1277fc;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 25px;
+      font-weight: 600;
+      box-shadow: 0 5px 10px rgba(18, 119, 252, 0.6);
+    }
+
+    button:hover,
+    button:focus {
+      background-color: #0a54c3;
+      outline: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    thead th {
+      background-color: #1277fc;
+      color: white;
+      padding: 10px;
+      font-weight: 700;
+      text-align: left;
+      border-bottom: 2px solid #0a54c3;
+    }
+
+    tbody td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    tbody tr:hover {
+      background-color: #f1faff;
+    }
+
+    tbody td:last-child {
+      text-align: center;
+      width: 140px;
+    }
+
+    /* Edit/Save button (yellow/green) */
+    .edit-btn, .save-btn {
+      background-color: #f6c700;
+      color: #333;
+      border-radius: 6px;
+      padding: 8px 15px;
+      margin: 5px 3px;
+      font-weight: 600;
+      box-shadow: 0 3px 6px rgba(246, 199, 0, 0.3);
+      border: none;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    .edit-btn:hover,
+    .edit-btn:focus {
+      background-color: #ffde59;
+      color: #333;
+      outline: none;
+    }
+    
+    .save-btn {
+      background-color: #4CAF50; /* Green color for Save */
+      color: white;
+      box-shadow: 0 3px 6px rgba(76, 175, 80, 0.5);
+    }
+    .save-btn:hover,
+    .save-btn:focus {
+      background-color: #45a049;
+    }
+
+    /* Delete button (red) */
+    .delete-btn {
+      background-color: #e74c3c;
+      color: #fff;
+      border-radius: 6px;
+      padding: 8px 15px;
+      margin: 5px 3px;
+      font-weight: 600;
+      box-shadow: 0 3px 6px rgba(231, 76, 60, 0.3);
+      border: none;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    .delete-btn:hover,
+    .delete-btn:focus {
+      background-color: #c0392b;
+      outline: none;
+    }
+    
+    /* Style for the input field during editing */
+    .edit-input {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .container {
+        width: 95%;
+        padding: 20px;
+        margin: 30px auto;
+      }
+
+      tbody td:last-child {
+        width: auto;
+      }
+    }
+  </style>
+  <script>
+    /**
+     * Toggles the marks cell to an input field for editing.
+     * @param {HTMLElement} editButton - The button element that was clicked (Edit/Save).
+     */
+    function handleEdit(editButton) {
+        const row = editButton.closest('tr');
+        // The marks cell is the 4th cell (index 3)
+        const marksCell = row.cells[3];
+        const resultId = row.dataset.resultId; // Get the ID from the row data attribute
+
+        if (editButton.classList.contains('edit-btn')) {
+            // --- SWITCH TO EDIT MODE ---
+            
+            // 1. Get the current marks value
+            const currentMarks = marksCell.textContent.trim();
+
+            // 2. Create the input field element
+            const inputField = document.createElement('input');
+            inputField.type = 'number';
+            inputField.className = 'edit-input';
+            inputField.value = currentMarks;
+            inputField.min = 0;
+            inputField.max = 100; // Assuming marks are out of 100
+
+            // 3. Replace the text content with the input field
+            marksCell.innerHTML = '';
+            marksCell.appendChild(inputField);
+
+            // 4. Change the button to 'Save'
+            editButton.textContent = 'Save';
+            editButton.classList.remove('edit-btn');
+            editButton.classList.add('save-btn');
+
+            inputField.focus(); // Focus on the input field
+            
+        } else if (editButton.classList.contains('save-btn')) {
+            // --- SWITCH TO VIEW MODE (SAVE) ---
+            
+            // 1. Get the new value from the input field
+            const inputField = marksCell.querySelector('.edit-input');
+            let newMarks = inputField.value.trim();
+
+            // Simple validation: ensure it's a number between 0 and 100
+            if (newMarks === '' || isNaN(newMarks) || newMarks < 0 || newMarks > 100) {
+                alert('Please enter a valid mark between 0 and 100.');
+                inputField.focus();
+                return;
+            }
+            
+            // 2. Update the cell content with the new marks
+            marksCell.textContent = newMarks;
+
+            // 3. Change the button back to 'Edit'
+            editButton.textContent = 'Edit';
+            editButton.classList.remove('save-btn');
+            editButton.classList.add('edit-btn');
+            
+            alert('Result ID ' + resultId + ' updated to ' + newMarks + ' marks (Client-side only).');
+        }
+    }
+
+    /**
+     * Handles the deletion of a result row.
+     * @param {string} resultId - The ID of the result being deleted.
+     * @param {HTMLElement} row - The table row element to remove.
+     */
+    function handleDelete(resultId, row) {
+      if (confirm('Are you sure you want to delete Result ID: ' + resultId + '?')) {
+        // Remove the row from the table
+        row.parentNode.removeChild(row);
+        alert('Result ID ' + resultId + ' deleted successfully (Client-side only).');
+      }
+    }
+  </script>
+</head>
+<body>
+<nav>
+  <ul>
+    <li><a href="admin-login.html">Login</a></li>
+    <li><a href="admin-dashboard.html">Dashboard</a></li>
+    <li><a href="manage-students.html">Manage Students</a></li>
+    <li><a href="manage-results.html">Manage Results</a></li>
+    <li><a href="manage-feedback.html">Manage Feedback</a></li>
+  </ul>
+</nav>
+
+<section class="container">
+  <h2>Manage Results</h2>
+  <button onclick="alert('Add Result form placeholder')">Add Result</button>
+  <table>
+    <thead>
+      <tr>
+        <th>Result ID</th>
+        <th>Student ID</th>
+        <th>Subject</th>
+        <th>Marks</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-result-id="101">
+        <td>101</td>
+        <td>1</td>
+        <td>Mathematics</td>
+        <td>88</td>
+        <td>
+          <button class="edit-btn" onclick="handleEdit(this)">Edit</button> 
+          <button class="delete-btn" onclick="handleDelete('101', this.closest('tr'));">Delete</button>
+        </td>
+      </tr>
+      <tr data-result-id="102">
+        <td>102</td>
+        <td>2</td>
+        <td>English</td>
+        <td>75</td>
+        <td>
+          <button class="edit-btn" onclick="handleEdit(this)">Edit</button>
+          <button class="delete-btn" onclick="handleDelete('102', this.closest('tr'));">Delete</button>
+        </td>
+      </tr>
+      <tr data-result-id="103">
+        <td>103</td>
+        <td>3</td>
+        <td>Science</td>
+        <td>92</td>
+        <td>
+          <button class="edit-btn" onclick="handleEdit(this)">Edit</button>
+          <button class="delete-btn" onclick="handleDelete('103', this.closest('tr'));">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+</body>
+</html>

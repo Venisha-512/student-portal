@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Students - Admin Panel</title>
+  <style>
+    /* Global Reset and Body Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    nav {
+      width: 100%;
+      background-color: #0288f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    nav ul li {
+      flex: 1;
+      text-align: center;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 0;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #006edc;
+    }
+
+    /* Container Styles */
+    .container {
+      background-color: #2c2478;
+      margin: 50px auto;
+      width: 90%;
+      max-width: 800px;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: bold;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Add Student Button */
+    .add-btn {
+      background: #2196f3;
+      color: #fff;
+      padding: 0.6em 1.6em;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 18px;
+      transition: background 0.3s;
+      box-shadow: 0 4px 8px rgba(33, 150, 243, 0.5);
+    }
+
+    .add-btn:hover {
+      background: #0d8cd3;
+    }
+    
+    /* Form Container Styles */
+    #addStudentFormContainer {
+      background-color: #4b429d;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      text-align: left;
+      display: none; /* Initially hidden */
+    }
+
+    #addStudentFormContainer label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    #addStudentFormContainer input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    #addStudentFormContainer .form-actions {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    #addStudentFormContainer button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      box-shadow: none;
+      margin-bottom: 0;
+    }
+
+    /* Table Styles */
+    .container table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 22px;
+    }
+
+    thead th {
+      background-color: #1277fc;
+      color: white;
+      padding: 10px;
+      font-weight: 700;
+      text-align: left;
+      border-bottom: 2px solid #0a54c3;
+    }
+
+    tbody td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    tbody tr:hover {
+      background-color: #f1faff;
+    }
+    
+    tbody td:last-child {
+      text-align: center;
+      width: 140px;
+    }
+
+    /* Action Buttons (Edit/Save/Delete) */
+    .action-btn {
+      border: none;
+      border-radius: 6px;
+      padding: 0.45em 1.1em;
+      margin: 5px 3px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    
+    .edit-btn {
+      background: #ff9800; /* Orange */
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(255, 152, 0, 0.4);
+    }
+    .edit-btn:hover {
+      background: #ffc107;
+      color: #222;
+    }
+
+    .save-btn {
+      background: #4CAF50; /* Green */
+      color: white;
+      box-shadow: 0 3px 6px rgba(76, 175, 80, 0.5);
+    }
+    .save-btn:hover {
+      background: #45a049;
+    }
+
+    .delete-btn {
+      background: #f44336; /* Red */
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(244, 67, 54, 0.5);
+    }
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+    
+    /* Input field during editing */
+    .edit-input {
+      width: 95%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .container {
+        width: 95%;
+        padding: 20px;
+        margin: 30px auto;
+      }
+
+      tbody td:last-child {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <ul>
+    <li><a href="admin-login.html">Login</a></li>
+    <li><a href="admin-dashboard.html">Dashboard</a></li>
+    <li><a href="manage-students.html">Manage Students</a></li>
+    <li><a href="manage-results.html">Manage Results</a></li>
+    <li><a href="manage-feedback.html">Manage Feedback</a></li>
+  </ul>
+</nav>
+
+<section class="container">
+  <h2>Manage Students</h2>
+  
+  <button class="add-btn" onclick="toggleAddForm()">Add Student</button>
+  
+  <div id="addStudentFormContainer">
+    <h3>Add New Student</h3>
+    <form id="addStudentForm">
+      <label for="newStudentName">Student Name:</label>
+      <input type="text" id="newStudentName" required>
+
+      <label for="newStudentEmail">Student Email:</label>
+      <input type="email" id="newStudentEmail" required>
+
+      <div class="form-actions">
+        <button type="submit" style="background: #4CAF50;">Save Student</button>
+        <button type="button" style="background: #757575;" onclick="toggleAddForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <table id="studentsTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="studentTableBody">
+      <tr data-student-id="1">
+        <td>1</td>
+        <td class="editable-cell" data-column="name">John Doe</td>
+        <td class="editable-cell" data-column="email">john@example.com</td>
+        <td>
+          <button class="action-btn edit-btn" onclick="editStudent(this)">Edit</button>
+          <button class="action-btn delete-btn" onclick="deleteStudent(this)">Delete</button>
+        </td>
+      </tr>
+      <tr data-student-id="2">
+        <td>2</td>
+        <td class="editable-cell" data-column="name">Jane Smith</td>
+        <td class="editable-cell" data-column="email">jane@example.com</td>
+        <td>
+          <button class="action-btn edit-btn" onclick="editStudent(this)">Edit</button>
+          <button class="action-btn delete-btn" onclick="deleteStudent(this)">Delete</button>
+        </td>
+      </tr>
+      <tr data-student-id="3">
+        <td>3</td>
+        <td class="editable-cell" data-column="name">Bob Johnson</td>
+        <td class="editable-cell" data-column="email">bob@example.com</td>
+        <td>
+          <button class="action-btn edit-btn" onclick="editStudent(this)">Edit</button>
+          <button class="action-btn delete-btn" onclick="deleteStudent(this)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<script>
+  // Global variable to simulate auto-incrementing Student IDs
+  let nextStudentId = 4; 
+
+  // --- Utility Functions ---
+
+  /**
+   * Toggles the visibility of the Add Student form.
+   */
+  function toggleAddForm() {
+    const formContainer = document.getElementById('addStudentFormContainer');
+    // Simple toggle between 'block' and 'none' display styles
+    formContainer.style.display = formContainer.style.display === 'block' ? 'none' : 'block';
+    
+    // Clear the form every time it is shown
+    if (formContainer.style.display === 'block') {
+        document.getElementById('addStudentForm').reset();
+    }
+  }
+
+  /**
+   * Generates a new table row element for a student.
+   */
+  function createStudentRow(id, name, email) {
+    const row = document.createElement('tr');
+    row.setAttribute('data-student-id', id);
+    row.innerHTML = `
+      <td>${id}</td>
+      <td class="editable-cell" data-column="name">${name}</td>
+      <td class="editable-cell" data-column="email">${email}</td>
+      <td>
+        <button class="action-btn edit-btn" onclick="editStudent(this)">Edit</button>
+        <button class="action-btn delete-btn" onclick="deleteStudent(this)">Delete</button>
+      </td>
+    `;
+    return row;
+  }
+  
+  // --- Add Student Form Submission Handler ---
+  
+  document.getElementById('addStudentForm').onsubmit = function(e) {
+    e.preventDefault();
+    
+    const studentName = document.getElementById('newStudentName').value.trim();
+    const studentEmail = document.getElementById('newStudentEmail').value.trim();
+    const tableBody = document.getElementById('studentTableBody');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validation
+    if (!studentName) {
+        alert('Student Name is required.');
+        return;
+    }
+    if (!emailRegex.test(studentEmail)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    
+    // Add new student to the table
+    const newRow = createStudentRow(nextStudentId, studentName, studentEmail);
+    tableBody.appendChild(newRow);
+    
+    alert(`New Student Added! ID: ${nextStudentId}, Name: ${studentName}`);
+    
+    // Increment ID for the next student
+    nextStudentId++;
+    
+    // Hide the form after submission
+    toggleAddForm(); 
+  };
+
+
+  // --- Existing Edit and Delete Functions ---
+
+  function editStudent(btn) {
+    const row = btn.closest('tr');
+    const studentId = row.dataset.studentId;
+    
+    // Select the editable cells (Name is index 1, Email is index 2)
+    const nameCell = row.cells[1];
+    const emailCell = row.cells[2];
+
+    if (btn.classList.contains('edit-btn')) {
+      // --- SWITCH TO EDIT MODE ---
+      const currentName = nameCell.textContent.trim();
+      nameCell.innerHTML = `<input type="text" class="edit-input" value="${currentName}" required>`;
+      const currentEmail = emailCell.textContent.trim();
+      emailCell.innerHTML = `<input type="email" class="edit-input" value="${currentEmail}" required>`;
+
+      btn.textContent = 'Save';
+      btn.classList.remove('edit-btn');
+      btn.classList.add('save-btn');
+      
+      nameCell.querySelector('.edit-input').focus();
+
+    } else if (btn.classList.contains('save-btn')) {
+      // --- SWITCH TO VIEW MODE (SAVE) ---
+      const newName = nameCell.querySelector('input').value.trim();
+      const newEmail = emailCell.querySelector('input').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!newName) {
+          alert('Name cannot be empty.');
+          nameCell.querySelector('input').focus();
+          return;
+      }
+      if (!emailRegex.test(newEmail)) {
+          alert('Please enter a valid email address.');
+          emailCell.querySelector('input').focus();
+          return;
+      }
+      
+      nameCell.textContent = newName;
+      emailCell.textContent = newEmail;
+
+      btn.textContent = 'Edit';
+      btn.classList.remove('save-btn');
+      btn.classList.add('edit-btn');
+      
+      alert(`Student ID ${studentId} updated (Name: ${newName}, Email: ${newEmail}).`);
+    }
+  }
+
+  function deleteStudent(btn) {
+    const row = btn.closest('tr');
+    const studentId = row.dataset.studentId;
+    const studentName = row.cells[1].textContent.trim();
+
+    if (confirm(`Are you sure you want to remove student ${studentName} (ID: ${studentId})?`)) {
+      row.remove();
+      alert(`Student ID ${studentId} deleted successfully (Client-side only).`);
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback - Student Portal</title>
+  <style>
+    /* Global Styles (Consistent with other pages) */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ===== NAVIGATION BAR (Kept as requested) ===== */
+    nav {
+      width: 100%;
+      background-color: #0288f7;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    nav ul li {
+      flex: 1;
+      text-align: center;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 0;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #006edc;
+    }
+
+    /* ===== FEEDBACK CARD CONTAINER ===== */
+    .container {
+      background-color: #2c2478;
+      margin: 50px 20px;
+      width: 100%;
+      max-width: 600px; 
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      color: #fff;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .subtitle {
+        color: #ddd;
+        margin-bottom: 30px;
+        font-size: 1rem;
+    }
+
+    /* Form and Input Styling */
+    #feedbackForm {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        text-align: left;
+    }
+    
+    .input-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    label {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #ddd; 
+    }
+
+    select, 
+    textarea {
+      padding: 12px;
+      border: 2px solid #4b429d; 
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f0f4ff; 
+      transition: border-color 0.3s, box-shadow 0.3s;
+      width: 100%;
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 150px;
+    }
+
+    select:focus, 
+    textarea:focus {
+        border-color: #ffc107; /* Yellow focus highlight */
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.3);
+    }
+    
+    /* Button Styling */
+    button[type="submit"] {
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #0288f7; /* Blue color for action */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 700;
+      transition: background 0.3s, transform 0.1s;
+      box-shadow: 0 4px 10px rgba(2, 136, 247, 0.4);
+    }
+    
+    button[type="submit"]:hover {
+        background-color: #006edc;
+        transform: translateY(-1px);
+    }
+
+    /* Success Message */
+    #feedbackMsg {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #4CAF50; /* Green for success */
+        color: white;
+        border-radius: 8px;
+        font-weight: bold;
+        display: none; /* Hidden by default */
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        nav ul {
+            flex-wrap: wrap;
+        }
+        nav ul li {
+            flex: 1 1 50%;
+        }
+        .container {
+            margin: 30px 10px;
+            padding: 30px 20px;
+        }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <section class="container">
+    <h2>Submit Feedback 💬</h2>
+    <p class="subtitle">Help us improve the portal by sharing your thoughts.</p>
+    
+    <div id="feedbackMsg">
+        ✅ Thank you! Your feedback has been successfully submitted.
+    </div>
+
+    <form id="feedbackForm">
+        
+        <div class="input-group">
+            <label for="feedbackType">Category</label>
+            <select id="feedbackType" required>
+                <option value="" disabled selected>Select Feedback Type</option>
+                <option value="suggestion">Suggestion for Improvement</option>
+                <option value="complaint">Complaint / Issue</option>
+                <option value="general">General Comment</option>
+                <option value="technical">Technical Support</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="feedbackText">Your Message</label>
+            <textarea id="feedbackText" placeholder="Please provide detailed feedback here (e.g., portal usability, feature requests, error reports)..." required></textarea>
+        </div>
+        
+        <button type="submit">Send Feedback</button>
+    </form>
+    
+  </section>
+  <script>
+    document.getElementById('feedbackForm').onsubmit = function(e) {
+      e.preventDefault();
+      const feedbackText = document.getElementById('feedbackText').value.trim();
+      const feedbackType = document.getElementById('feedbackType').value;
+      const feedbackMsg = document.getElementById('feedbackMsg');
+      
+      // Basic validation
+      if (feedbackType === "" || feedbackText.length < 10) {
+          feedbackMsg.textContent = "Please select a category and provide at least 10 characters of feedback.";
+          feedbackMsg.style.backgroundColor = '#f44336'; // Red for error
+          feedbackMsg.style.display = 'block';
+          return;
+      }
+      
+      // Simulate submission (In a real app, this sends data to the server)
+      
+      // Show success message
+      feedbackMsg.textContent = '✅ Thank you! Your feedback has been successfully submitted.';
+      feedbackMsg.style.backgroundColor = '#4CAF50';
+      feedbackMsg.style.display = 'block';
+      
+      // Clear the form fields
+      document.getElementById('feedbackForm').reset();
+      
+      // Hide the message after 4 seconds
+      setTimeout(() => {
+          feedbackMsg.style.display = 'none';
+      }, 4000);
+    };
+  </script>
+</body>
+</html>

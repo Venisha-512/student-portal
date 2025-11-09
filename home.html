@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home - Student Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    nav {
+      width: 100%;
+      background-color: #0288f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    nav ul li {
+      flex: 1;
+      text-align: center;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 16px 0;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      transition: background 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #006edc;
+    }
+
+    .home-container {
+      max-width: 400px; /* smaller box */
+      margin: auto;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1.2s ease forwards;
+      flex: 1 0 auto;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .home-container h1 {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .home-container p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .home-container a.button {
+      display: inline-block;
+      padding: 1rem 3rem;
+      background: #2575fc;
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(37, 117, 252, 0.7);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .home-container a.button:hover {
+      background: #145ecb;
+      box-shadow: 0 6px 15px rgba(20, 94, 203, 0.9);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .home-container {
+        width: 90%;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+  <section class="home-container">
+    <h1>Welcome to the Student Result Portal</h1>
+    <p>Your gateway to academic progress and profile management</p>
+    <a href="login.html" class="button">Get Started</a>
+  </section>
+</body>
+</html>
